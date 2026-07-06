@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
 const connectMongo = require('./config/mongodb');
-
+const { Utilisateur, Vehicule, Reservation } = require('./models');
 // 2.On crée notre application
 const app = express();
 
@@ -20,6 +20,11 @@ sequelize.authenticate()
   .catch((error) => console.error('Erreur MySQL :', error.message));
 
 connectMongo();
+
+// Synchronisation des modèles : Sequelize crée les tables si elles n'existent pas
+sequelize.sync()
+  .then(() => console.log('Tables synchronisées'))
+  .catch((error) => console.error('Erreur sync :', error.message));
 
 
 // 4. On écrit nos routes
