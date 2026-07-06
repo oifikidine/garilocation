@@ -8,6 +8,7 @@ const sequelize = require('./config/database');
 const connectMongo = require('./config/mongodb');
 const { Utilisateur, Vehicule, Reservation } = require('./models');
 const vehiculeRoutes = require('./routes/vehiculeRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // 2.On crée notre application
 const app = express();
@@ -31,6 +32,8 @@ sequelize.sync()
 
 // 4. On écrit nos routes
 app.use('/api/vehicules', vehiculeRoutes);
+
+app.use('/api/auth', authRoutes);
 
 // Route de test 
 app.get('/', (req, res) => {
