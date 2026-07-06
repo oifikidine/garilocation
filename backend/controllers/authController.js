@@ -39,3 +39,42 @@ exports.inscription = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+// POST /api/auth/connexion - se connecter
+exports.connexion = async (req, res) => {
+  try {
+    const { email, mot_de_passe } = req.body;
+
+    // On cherche le compte par email
+    const utilisateur = await Utilisateur.findOne({ where: { email } });
+    if (!utilisateur) {
+      return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+    }
+
+    // on compare l'empreinte du mot de passe tapé avec celle stockée
+    const motDePasseValide = await bcrypt.compare(mot_de_passe, utilisateur.mot_de_passe);
+    if (!motDePasseValide) {
+      return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+    }
+
+    // on fabrique le bracelet (token), signé avec notre secret
+    const token = jwt.sign(
+      { id: utilisateur.id, role: utilisateur.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // On renvoie le token + les infos utiles au front
+    res.json({
+      token,
+      utilisateur: {
+        id: utilisateur.id,
+        prenom: utilisateur.prenom,
+        role: utilisateur.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
