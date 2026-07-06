@@ -4,6 +4,8 @@
 require('dotenv').config();// charge les variables du fichier .env
 const express = require('express');
 const cors = require('cors');
+const sequelize = require('./config/database');
+const connectMongo = require('./config/mongodb');
 
 // 2.On crée notre application
 const app = express();
@@ -11,6 +13,13 @@ const app = express();
 // 3.ON met en places nos Middlewares 
 app.use(cors());      // autorise le front React à appeler l'API
 app.use(express.json());    // permet de lire le JSON envoyé dans les requêtes
+
+// Connexion aux bases de données
+sequelize.authenticate()
+  .then(() => console.log('MySQL connecté'))
+  .catch((error) => console.error('Erreur MySQL :', error.message));
+
+connectMongo();
 
 
 // 4. On écrit nos routes
