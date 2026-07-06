@@ -1,0 +1,14 @@
+// models/Avis.js - Modèle MongoDB (Mongoose) pour les avis clients
+const mongoose = require('mongoose');
+
+const avisSchema = new mongoose.Schema({
+  vehicule_id: { type: Number, required: true },   // référence vers le véhicule (MySQL)
+  utilisateur_id: { type: Number, required: true },
+  nom_affichage: { type: String, required: true }, // ex : "Ali"
+  note: { type: Number, required: true, min: 1, max: 5 },
+  commentaire: { type: String },                   // facultatif : une note sans texte est permise
+}, {
+  timestamps: true,  // ajoute createdAt / updatedAt automatiquement
+});
+
+module.exports = mongoose.model('Avis', avisSchema);

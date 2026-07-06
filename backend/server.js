@@ -7,6 +7,8 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 const connectMongo = require('./config/mongodb');
 const { Utilisateur, Vehicule, Reservation } = require('./models');
+const vehiculeRoutes = require('./routes/vehiculeRoutes');
+
 // 2.On crée notre application
 const app = express();
 
@@ -28,6 +30,7 @@ sequelize.sync()
 
 
 // 4. On écrit nos routes
+app.use('/api/vehicules', vehiculeRoutes);
 
 // Route de test 
 app.get('/', (req, res) => {
