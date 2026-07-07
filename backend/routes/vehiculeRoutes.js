@@ -2,11 +2,12 @@
 const express = require('express');
 const router = express.Router();
 const vehiculeController = require('../controllers/vehiculeController');
+const { verifierToken, verifierAdmin } = require('../middlewares/auth');
 
 router.get('/', vehiculeController.getAllVehicules);      // GET /api/vehicules
 router.get('/:id', vehiculeController.getVehiculeById);   // GET /api/vehicules/:id
-router.post('/', vehiculeController.createVehicule);     // POST /api/vehicules
-router.put('/:id', vehiculeController.updateVehicule);      // PUT /api/vehicules/:id
-router.delete('/:id', vehiculeController.deleteVehicule);   // DELETE /api/vehicules/:id
+router.post('/', verifierToken, verifierAdmin, vehiculeController.createVehicule);
+router.put('/:id', verifierToken, verifierAdmin, vehiculeController.updateVehicule);
+router.delete('/:id', verifierToken, verifierAdmin, vehiculeController.deleteVehicule);
 
 module.exports = router;
