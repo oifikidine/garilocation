@@ -394,3 +394,70 @@ main {
   min-height: 38px;
   font-size: 0.9rem;
 }
+
+
+/* ===== MENU BURGER (mobile-first) ===== */
+.burger {
+  background: none;
+  border: none;
+  color: var(--blanc);
+  font-size: 1.6rem;
+  cursor: pointer;
+  display: block;             /* visible sur mobile */
+}
+
+/* Sur mobile : la nav est cachée par défaut, elle se déplie sous le header */
+.header nav {
+  display: none;
+}
+
+.header nav.nav-ouverte {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  background-color: var(--bleu-lagon);
+  padding: 15px 20px;
+  gap: 15px;
+  z-index: 10;
+}
+
+.header nav.nav-ouverte a,
+.header nav.nav-ouverte .btn-deconnexion {
+  margin-left: 0;
+}
+
+.header {
+  position: relative;         /* point d'ancrage du menu déplié */
+}
+
+/* Desktop : le burger disparaît, la nav redevient horizontale */
+@media (min-width: 768px) {
+  .burger {
+    display: none;
+  }
+  .header nav {
+    display: flex;
+    align-items: center;
+  }
+}
+
+
+
+/* ===== PAGES 404 / CONTENU A VENIR ===== */
+.page-vide {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.page-vide h1 {
+  font-size: 2.5rem;
+  color: var(--bleu-lagon);
+  margin-bottom: 12px;
+}
+
+.page-vide p {
+  margin-bottom: 25px;
+}

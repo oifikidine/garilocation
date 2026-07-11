@@ -1,9 +1,10 @@
-// components/Header.jsx - Navigation, adaptée selon l'utilisateur connecté
+// components/Header.jsx - Navigation avec menu burger sur mobile
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
-  // On lit l'utilisateur stocké à la connexion (null si personne)
+  const [menuOuvert, setMenuOuvert] = useState(false);
   const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
 
   const handleDeconnexion = () => {
@@ -13,27 +14,33 @@ function Header() {
     window.location.reload();
   };
 
+  // Ferme le menu après un clic sur un lien (confort mobile)
+  const fermerMenu = () => setMenuOuvert(false);
+
   return (
     <header className="header">
-      <Link to="/" className="logo">GARILocation</Link>
-      <nav>
-        <Link to="/">Accueil</Link>
+      <Link to="/" className="logo" onClick={fermerMenu}>GARILocation</Link>
 
-        {/* Visiteur non connecté */}
-        {!utilisateur && <Link to="/connexion">Connexion</Link>}
+      {/* Bouton burger : visible uniquement sur mobile (via CSS) */}
+      <button className="burger" onClick={() => setMenuOuvert(!menuOuvert)} aria-label="Menu">
+        ☰
+      </button>
 
-        {/* Client connecté */}
+      <nav className={menuOuvert ? 'nav-ouverte' : ''}>
+        <Link to="/" onClick={fermerMenu}>Accueil</Link>
+
+        {!utilisateur && <Link to="/connexion" onClick={fermerMenu}>Connexion</Link>}
+
         {utilisateur && utilisateur.role === 'client' && (
           <>
-            <Link to="/mes-reservations">Mes réservations</Link>
+            <Link to="/mes-reservations" onClick={fermerMenu}>Mes réservations</Link>
             <button onClick={handleDeconnexion} className="btn-deconnexion">Déconnexion</button>
           </>
         )}
 
-        {/* Admin connecté */}
         {utilisateur && utilisateur.role === 'admin' && (
           <>
-            <Link to="/admin">Espace admin</Link>
+            <Link to="/admin" onClick={fermerMenu}>Espace admin</Link>
             <button onClick={handleDeconnexion} className="btn-deconnexion">Déconnexion</button>
           </>
         )}
